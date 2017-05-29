@@ -203,7 +203,7 @@ exports.randomplay = function (req, res, next) {
 		id:{$notIn: req.session.yhc}
 		}})
 	.then(function(c){
-		a1=Math.floor(Math.random() * (c-0) + 0);
+		a1 = Math.floor(Math.random() * (c-0) + 0);
 		return models.Quiz.findAll({where:
 			{ id: {$notIn: req.session.yhc}
 		}})
@@ -225,6 +225,7 @@ exports.randomcheck = function (req, res, next) {
 	var result = answer.toLowerCase().trim() === req.quiz.answer.toLowerCase().trim();
 	
 	if(result){
+
 		req.session.score = req.session.score + 1; }
 		else{
 			req.session.score = 0;
@@ -237,6 +238,10 @@ exports.randomcheck = function (req, res, next) {
 			req.session.yhc = [-1];
 			req.session.score = 0;
 			res.render('quizzes/random_nomore', {
+					score: req.session.score});
+			}
+		else{
+			res.render('quizzes/random_result',{
 				quiz: req.quiz,
 				result: result,
 				score: req.session.score,
@@ -244,6 +249,7 @@ exports.randomcheck = function (req, res, next) {
 				}
 			});
 };
+
 
 
 

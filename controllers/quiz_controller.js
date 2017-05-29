@@ -191,17 +191,32 @@ exports.check = function (req, res, next) {
 
 //RANDOMPLAY
 
+var score = 0;
 exports.randomplay = function (req, res, next) {
 
-    var answer = req.query.answer || "";
+	if(!req.session.score) req.session.score = 0;
+	if(req.session.score === 0) req.session.yhc = [-1];
 
-    var result = answer.toLowerCase().trim() === req.quiz.answer.toLowerCase().trim();
+	var answer = req.query.answer || '' ;
 
-    res.render('quizzes/result', {
-        quiz: req.quiz,
-        result: result,
-        answer: answer
-    });
+	models.Quiz.count({where:{
+		id:{$notIn: req.session.yhc}
+		}})
+	.then(function(c){
+		a1=Math.floor(Math.random() * (c-0) + 0);
+		return models.Quiz.findAll({where:
+			{ id: {$notIn: req.session.yhc}
+		}})
+	.then(function(quiz){
+	preg = quiz[a1];
+	req.session.yhc.push(preg.id);
+	res.render('quizzes/random_play',{
+		quiz: preg,
+		answer: answer,
+		score: req.session.score
+	});});});
 };
+
+
 
 

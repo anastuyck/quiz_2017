@@ -208,15 +208,42 @@ exports.randomplay = function (req, res, next) {
 			{ id: {$notIn: req.session.yhc}
 		}})
 	.then(function(quiz){
-	preg = quiz[a1];
-	req.session.yhc.push(preg.id);
+	pregunta = quiz[a1];
+	req.session.yhc.push(pregunta.id);
 	res.render('quizzes/random_play',{
-		quiz: preg,
+		quiz: pregunta,
 		answer: answer,
 		score: req.session.score
 	});});});
 };
 
+
+//RANDOMCHECK
+
+exports.randomcheck = function (req, res, next) {
+	var answer = req.query.answer || "";
+	var result = answer.toLowerCase().trim() === req.quiz.answer.toLowerCase().trim();
+	
+	if(result){
+		req.session.score = req.session.score + 1; }
+		else{
+			req.session.score = 0;
+			req.session.yhc = [-1];
+		}
+
+	models.Quiz.count()
+	.then(function(c){
+		if(req.session.score === c){
+			req.session.yhc = [-1];
+			req.session.score = 0;
+			res.render('quizzes/random_nomore', {
+				quiz: req.quiz,
+				result: result,
+				score: req.session.score,
+				answer: answer});
+				}
+			});
+};
 
 
 

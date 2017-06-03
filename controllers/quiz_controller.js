@@ -45,7 +45,7 @@ exports.adminOrAuthorRequired = function(req, res, next){
 exports.index = function (req, res, next) {
 
     var countOptions = {
-//        where: {}
+        where: {}
     };
 
     var title = "Preguntas";

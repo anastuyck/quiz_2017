@@ -6,9 +6,9 @@ var paginate = require('../helpers/paginate').paginate;
 // Autoload el quiz asociado a :quizId
 exports.load = function (req, res, next, quizId) {
 
-    models.Quiz.findById(quizId, {
-        include: [
-            models.Tip,
+    models.Quiz.findById(quizId, { 
+	include: [ 
+		models.Tip,
             {model: models.User, as: 'Author'}
         ]
     })
@@ -45,7 +45,7 @@ exports.adminOrAuthorRequired = function(req, res, next){
 exports.index = function (req, res, next) {
 
     var countOptions = {
-        where: {}
+//        where: {}
     };
 
     var title = "Preguntas";
